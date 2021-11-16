@@ -30,12 +30,19 @@ import java.util.*;
 public class MaxEnt {
 
     static void checkVersion() {
-	String version = System.getProperties().getProperty("java.version");
-	double v = Double.parseDouble(version.substring(0,3));
+	String verStr = System.getProperties().getProperty("java.version");
+	int version;
+	if(verStr.startsWith("1.")) {
+		version = Integer.parseInt(verStr.substring(2,3));
+	} else {
+		int dot = verStr.indexOf('.');
+		version = Integer.parseInt(dot<0 ? verStr : verStr.substring(0,dot));
+	}
+	
 	// can't call Utils, as Utils needs 1.4 to load (prefs.Preferences)
 	//	if (v < 1.4) Utils.fatalException("Java version is " + version + ", need 1.4 or later", null);
-	if (v < 1.5) {
-	    JOptionPane.showMessageDialog(null, "Java version is " + version + ", but Maxent needs 1.5 or later.", "Error", JOptionPane.ERROR_MESSAGE);
+	if (version < 7) {
+	    JOptionPane.showMessageDialog(null, "Java version is " + verStr + ", but Maxent needs 7 or later.", "Error", JOptionPane.ERROR_MESSAGE);
 	    System.exit(1);
 	}
     }
